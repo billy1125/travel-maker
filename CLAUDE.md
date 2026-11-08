@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 路徑 | 說明 |
 |------|------|
 | `CLAUDE.md`、`README.md` | 通用規範與說明 |
+| `LICENSE`、`NOTICE` | 授權（CC BY-NC 4.0）與第三方元件授權聲明；`tw-opendata-transportation` 是外部取得的技能，維持 Apache-2.0，授權全文在該技能資料夾的 `LICENSE` |
 | `.claude/` | 所有行程專案共用的技能（`skills/`）與權限設定（`settings.json`） |
 | `travels/` | 行程專案。**git 不追蹤**，只有 `travels/_template/` 例外 |
 | `travels/_template/` | 新行程專案的範本，含各層的空白骨架檔 |

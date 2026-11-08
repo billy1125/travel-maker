@@ -1,0 +1,25 @@
+travel-maker
+Copyright (c) 2026 Cho-Hsun Lu (billy1125)
+
+This repository is licensed under CC BY-NC 4.0 (see LICENSE), except for
+the third-party components listed below. Each keeps its own license.
+
+=======================================================================
+Third-party components
+=======================================================================
+
+1. tw-opendata-transportation
+
+   Path:     .claude/skills/tw-opendata-transportation/
+   Origin:   Obtained from an external source. The original author is
+             not stated in SKILL.md.
+   License:  Apache License 2.0
+             (full text: .claude/skills/tw-opendata-transportation/LICENSE)
+
+   Data accessed by this skill comes from the Ministry of Transportation
+   and Communications (Taiwan) and related operators, under the
+   Open Government Data License, version 1.0 (政府資料開放授權條款－第1版).
+   https://data.gov.tw/license
+
+   This skill is not covered by the CC BY-NC 4.0 license of this
+   repository.
