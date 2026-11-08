@@ -52,11 +52,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 其他檔案：
 
 - `CLAUDE.md` — 該行程專屬的資訊與規則
-- `README.md` — 該行程的索引，包括 `itinerary.md`、`luggage_items.md`，含每日行程、交通指南、旅宿指南與攝影景點的完整連結表；新增或移除 `days/`、`transportations/`、`hotel/`、`photospots/` 檔案時要同步更新。
+- `README.md` — 該行程的索引，包括 `itinerary.md`、`luggage_items.md`、`shopping.md`，含每日行程、交通指南、旅宿指南與攝影景點的完整連結表；新增或移除 `days/`、`transportations/`、`hotel/`、`photospots/` 檔案時要同步更新。
 - `assets/`（支援資料） — 主要是使用者提供的額外資料，例如電子機票、旅館預定紀錄等，被上面各層所引用；另含使用者維護的網址索引 `reference_website.md`、Claude 寫入的網站摘要 `website_abstract.md`，以及 `build-transportation` 下載的車站構造圖 PDF，擁有者見下方表格。
 
   > 本環境沒有 `pdftoppm`，Read 工具**無法直接讀 PDF**。需要讀訂房確認單、電子機票等 PDF 時，用 `source-document-extraction` 技能擷取成 Markdown，輸出放在原 PDF 旁邊、檔名相同（`assets/xxx.pdf` → `assets/xxx.md`），再用 Read 讀。
 - `luggage_items.md` — 行李清單（checkbox 格式，含鋰電池新規等航空限制），原則上僅有清單與簡單提示，不放與行程、景點有關資訊。
+- `shopping.md` — 購物指南：平日採買據點（超市、便利商店、藥妝）與紀念品店家的地址、營業時間、適合買什麼與對應行程日，以及回台入境的攜帶限制。只記錄購物資訊，不改動行程。
 
 ## 工作流程
 
@@ -104,6 +105,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `itinerary.md`、`days/`、`transportations/` | 共同 | 經討論確認後由 `/update-itinerary` 更新 |
 | `hotel/` | 共同 | 經討論確認後由 `/build-hotel` 更新；訂房事實以 `assets/` 的訂房 PDF 為準 |
 | `photospots/` | 共同 | 查證後直接更新，**不需經 `/update-itinerary`**；但把拍攝點排進行程仍要走 `/update-itinerary` |
+| `shopping.md` | 共同 | 查證後直接更新，**不需經 `/update-itinerary`**；但把購物排進行程仍要走 `/update-itinerary` |
 
 `travels/_template/` 是範本，平時不寫入行程內容；要調整範本時須使用者明確要求。
 
@@ -128,6 +130,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `days/` 檔名格式為 `yyyyMMDD.md`，例如 `days/20260901.md`；**同一日備有兩套以上完整互斥方案時**，加英文小寫 slug 後綴寫成 `yyyyMMDD-{slug}.md`（例：`days/20260903-bike.md` 晴天主案、`days/20260903-rain.md` 雨天備案），拆檔條件與交叉連結規則見 `day_format.md`
 - `transportations/` 檔名分路段、單一車站、市內交通系統三種，命名規則見 `transportation_format.md`
 - `hotel/` 檔名為 PascalCase 英文旅館名，連鎖品牌加地點後綴，例如 `hotel/SmileHotelOkayama.md`，規則見 `hotel_format.md`
+- 行程的天數、晚數與日期區間依目的地當地的實際時間計算：天數從抵達當地那天算到離開當地那天，晚數是在當地住宿的晚數，不把飛行途中或跨換日線多出的日子算進去。回程跨日抵達的日期只寫在回程航班那一列（例：11/18 抵達、11/25 23:30 起飛、11/27 返抵桃園，寫成 `2026/11/18–2026/11/25（8 天 7 晚）`）
 - 技能中的「當地語言」「當地原名」「幣別」「國碼」，以及當地語言名稱（例如日文片假名）的寫法，都寫在各行程專案 `CLAUDE.md` 的「當地規則」與名稱寫法兩節
 
 ## 環境限制

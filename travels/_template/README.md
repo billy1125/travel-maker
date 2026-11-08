@@ -47,6 +47,7 @@
 | 路徑 | 說明 |
 |---|---|
 | [luggage_items.md](luggage_items.md) | 行李清單 |
+| [shopping.md](shopping.md) | 購物指南：平日採買據點與紀念品 |
 | [assets/reference_website.md](assets/reference_website.md) | 參考網站索引（由使用者維護） |
 | [assets/website_abstract.md](assets/website_abstract.md) | 參考網站摘要，依交通／美食／購物／景點／住宿／行李準備分類 |
 | `assets/*.pdf` | 電子機票、訂房確認單等 |

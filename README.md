@@ -113,6 +113,7 @@ travel-maker/
         ├── photospots/           # 攝影景點，一個城市一個檔案
         ├── assets/               # 電子機票、訂房確認單、網址索引、網站摘要
         ├── luggage_items.md      # 行李清單
+        ├── shopping.md           # 平日採買據點與紀念品
         └── archive/              # 異動前的自動備份（唯讀）
 ```
 
