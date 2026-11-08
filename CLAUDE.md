@@ -55,7 +55,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `README.md` — 該行程的索引，包括 `itinerary.md`、`luggage_items.md`，含每日行程、交通指南、旅宿指南與攝影景點的完整連結表；新增或移除 `days/`、`transportations/`、`hotel/`、`photospots/` 檔案時要同步更新。
 - `assets/`（支援資料） — 主要是使用者提供的額外資料，例如電子機票、旅館預定紀錄等，被上面各層所引用；另含使用者維護的網址索引 `reference_website.md`、Claude 寫入的網站摘要 `website_abstract.md`，以及 `build-transportation` 下載的車站構造圖 PDF，擁有者見下方表格。
 
-  > 本環境沒有 `pdftoppm`，Read 工具**無法直接讀 PDF**。需要讀訂房確認單等 PDF 時，**先問使用者**（要用 PyMuPDF 抽文字，但執行環境不由 Claude 決定，詳見下方「環境限制」）。
+  > 本環境沒有 `pdftoppm`，Read 工具**無法直接讀 PDF**。需要讀訂房確認單、電子機票等 PDF 時，用 `source-document-extraction` 技能擷取成 Markdown，輸出放在原 PDF 旁邊、檔名相同（`assets/xxx.pdf` → `assets/xxx.md`），再用 Read 讀。
 - `luggage_items.md` — 行李清單（checkbox 格式，含鋰電池新規等航空限制），原則上僅有清單與簡單提示，不放與行程、景點有關資訊。
 
 ## 工作流程
@@ -109,7 +109,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 技能清單
 
-`.claude/skills/` 有六個通用技能：
+`.claude/skills/` 有七個通用技能：
 
 | 技能 | 用途 | 呼叫方式 |
 |------|------|----------|
@@ -119,6 +119,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `build-hotel` | 盤點旅宿，建立或補充 `hotel/` 指南與聯絡信件 | 使用者呼叫，Claude 也可自行判斷使用；建檔前一定要先取得使用者同意 |
 | `save-website-abstract` | 把本次抓取的網站整理成摘要寫入 `assets/website_abstract.md` | 使用者呼叫；抓過網站就該執行 |
 | `tw-opendata-transportation` | 台灣交通部 OpenData 批次資料（台鐵、高鐵、捷運、公路客運、民航的路線／站點／票價／時刻表／運量統計） | **預設不呼叫**；需要查台灣端交通（例：桃園機場聯外、台鐵、高鐵）時，由使用者明確指示啟用 |
+| `source-document-extraction` | 把 `assets/` 的 PDF（電子機票、訂房確認單、車站構造圖）擷取成同名 `.md`，放在原 PDF 旁邊 | 使用者呼叫，Claude 需要讀 PDF 時也可自行判斷使用 |
 
 ## 格式規範重點
 
@@ -131,8 +132,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 環境限制
 
-`.claude/settings.json` **禁止直接執行 `python`／`pip`，且沒有任何預先允許的 Python 執行規則**。
+Claude 可以執行 Python，但 `.claude/settings.json` 禁止 `pip install`，不自行安裝或改動環境。
 
-- **需要跑 Python 時（例如讀 `assets/` 的訂房 PDF），Claude 不要自己挑環境、不要自己決定怎麼跑，一律先問使用者。** 由使用者手動執行後把結果交回。
-- 環境判斷（哪個 conda 環境、有沒有裝 PyMuPDF、conda 在不在 PATH）**都不是 Claude 該自行決定的事**，猜錯只會浪費來回。
-- 所需套件見根目錄 `README.md` 的「環境需求」。
+- 環境名稱不限，只要能 `import pymupdf, pymupdf4llm` 就可以用；找環境的方式寫在 `source-document-extraction` 的 `SKILL.md`
+- 找不到可用環境時，請使用者依根目錄 `README.md` 的「前置需求」建立

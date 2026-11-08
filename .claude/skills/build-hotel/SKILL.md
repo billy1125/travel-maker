@@ -29,7 +29,7 @@ allowed-tools: Read Write Edit Glob Grep Bash WebFetch WebSearch
 - 用 Glob 列出 `assets/` 內的訂房文件（PDF），取得訂房事實
 - 整理成清單：**旅宿名稱｜期間｜晚數｜訂房文件｜目前資料散落在哪些檔案**
 
-**讀取訂房 PDF 的方式**：本環境沒有 `pdftoppm`，Read 工具無法直接讀 PDF。需要讀訂房 PDF 時**先詢問使用者**，由使用者用 PyMuPDF 抽成 `.txt` 後交回，再用 Read 讀。不自行選擇或執行 Python 環境（見 repo 根目錄 `CLAUDE.md` 的「環境限制」）。
+**讀取訂房 PDF 的方式**：本環境沒有 `pdftoppm`，Read 工具無法直接讀 PDF。先找 PDF 旁有沒有同名 `.md`；沒有就用 `source-document-extraction` 技能擷取，再用 Read 讀。
 
 ### 3. 比對既有指南
 

@@ -24,6 +24,7 @@
 | `build-hotel` | 盤點旅宿，建立旅宿指南、英文與當地語言聯絡信件，並整理館方回信 | `hotel/` |
 | `save-website-abstract` | 把討論中抓取過的網站整理成摘要 | `assets/website_abstract.md` |
 | `tw-opendata-transportation` | 查詢台灣交通部 OpenData（台鐵、高鐵、捷運、客運、民航）；預設不呼叫 | （查詢結果） |
+| `source-document-extraction` | 把電子機票、訂房確認單等 PDF 擷取成 Markdown | 原 PDF 旁的同名 `.md` |
 
 各技能的執行細節見各自的 `SKILL.md`，共用規範見 [CLAUDE.md](CLAUDE.md)。
 
@@ -50,10 +51,28 @@
 ## 前置需求
 
 1. **Claude Code**：所有技能都在 Claude Code 內執行。
-2. **PyMuPDF**（選用）：只有讀 `assets/` 的 PDF（訂房確認單、電子機票、車站構造圖）時需要，`pip install pymupdf`。本環境沒有 `pdftoppm`，Claude Code 的 Read 工具也讀不了 PDF，只能先抽成文字再讀。
+2. **Python 環境**（選用）：只有讀 `assets/` 的 PDF（訂房確認單、電子機票、車站構造圖）時需要，由 `source-document-extraction` 技能使用。Claude Code 的 Read 工具讀不了 PDF，要先擷取成 Markdown 再讀。
 3. **Twinkle Hub MCP**（選用）：只有使用 `tw-opendata-transportation` 時需要。
 
-這個專案本身不需要建置或安裝，內容全是 Markdown。`.claude/settings.json` 禁止直接執行 `python`／`pip`，Claude 遇到需要讀 PDF 時會先詢問，由使用者手動執行。
+### 建議的 conda 環境
+
+環境名稱不限，下面的 `travel` 可以換成任何名稱，也可以裝進既有環境，只要有這兩個套件就好：
+
+| 套件 | 用途 |
+|---|---|
+| `pymupdf` | 開啟 PDF、抽純文字、把頁面轉成 PNG |
+| `pymupdf4llm` | 把 PDF 轉成 Markdown（含標題與表格） |
+
+```bash
+conda create -n travel python=3.11 -y
+conda activate travel
+pip install pymupdf pymupdf4llm
+python -c "import pymupdf, pymupdf4llm"   # 沒有錯誤訊息就代表可用
+```
+
+Claude 會在 `~/miniconda3`、`~/anaconda3`、`~/miniforge3` 的 `envs/` 底下找第一個裝好這兩個套件的環境。conda 裝在其他位置時，設環境變數 `SDE_PYTHON` 指向該環境的 Python 執行檔。
+
+這個專案本身不需要建置或安裝，內容全是 Markdown。`.claude/settings.json` 禁止 `pip install`，Claude 不會自行安裝套件。
 
 ## 設計要點
 
@@ -80,6 +99,7 @@ travel-maker/
 │       ├── build-hotel/
 │       ├── save-website-abstract/
 │       │   └── reference/        # 網站摘要格式規範
+│       ├── source-document-extraction/   # PDF 擷取成 Markdown
 │       └── tw-opendata-transportation/   # 第三方元件，Apache-2.0
 └── travels/                      # 行程專案（git 不追蹤）
     ├── _template/                # 新行程專案的範本（git 追蹤）
@@ -107,7 +127,7 @@ travel-maker/
 
 ## 已知限制
 
-- Claude Code 無法直接讀 PDF，訂房確認單等資料需要使用者先用 PyMuPDF 抽出文字。
+- Claude Code 無法直接讀 PDF，要先用 `source-document-extraction` 擷取成 Markdown。版面複雜的 PDF（例如機票的航班表格）擷取後欄位可能錯位，確認碼、日期、金額要對照純文字或頁面圖片。
 - `tw-opendata-transportation` 只有批次資料，不含即時到站、誤點資訊。
 
 ## 📄 授權 / License
